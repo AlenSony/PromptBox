@@ -1,0 +1,240 @@
+Create a scroll-driven frame animation system similar to Apple product pages using Canvas + Image Sequences, where scrolling controls the animation frames.
+The animation should be smooth, pixel-accurate, performant, and preload all frames before interaction.
+1. Animation Pipeline
+The animation system should follow this pipeline:
+Copy code
+
+Video (MP4) → FFMPEG → Image Sequence (WebP) → Preload Frames → Canvas Rendering → Scroll Logic
+Steps:
+Create or export a rendered animation video.
+Convert the video into individual frames.
+Store frames as WebP images for efficiency.
+Preload all frames before starting the experience.
+Render frames on a canvas element.
+Control frame switching based on scroll position.
+2. Extract Frames Using FFMPEG
+Use FFMPEG to convert the animation video into frames.
+Example command:
+Bash
+Copy code
+ffmpeg -i animation.mp4 -vf "fps=30" frames/frame-%04d.webp
+Optional quality control:
+Bash
+Copy code
+ffmpeg -i animation.mp4 -vf "fps=30" -quality 80 frames/frame-%04d.webp
+Guidelines:
+Use 120–200 frames for smooth scroll animation.
+More frames = smoother but larger download.
+Reduce frames by lowering FPS or trimming the video first.
+Example size estimate:
+Copy code
+
+160 frames at 1920x1080 ≈ ~19MB using WebP
+Same frames as JPG ≈ 25–30MB
+WebP benefits:
+25–35% smaller than JPEG
+Supported by modern browsers
+Optional transparency support
+Optional lossless mode
+3. HTML Structure
+Create a scroll container with a sticky canvas.
+HTML
+Copy code
+<div class="scroll-container">
+
+  <div class="sticky-canvas">
+      <canvas id="frame-canvas"></canvas>
+  </div>
+
+</div>
+4. CSS Layout
+Use position: sticky so the animation stays fixed while the user scrolls.
+CSS
+Copy code
+body{
+  margin:0;
+  overflow-x:hidden;
+}
+
+.scroll-container{
+  height:400vh; /* controls animation duration */
+}
+
+.sticky-canvas{
+  position:sticky;
+  top:0;
+  height:100vh;
+  width:100%;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+
+canvas{
+  width:100%;
+  height:100%;
+  object-fit:contain;
+}
+Explanation:
+scroll-container provides scroll distance
+sticky-canvas pins the animation to the viewport
+scroll progress drives the animation frame
+5. JavaScript Implementation
+The animation must:
+preload frames
+batch loading to avoid browser overload
+map scroll position to frame number
+draw frames onto canvas
+6. Canvas Setup
+JavaScript
+Copy code
+const canvas = document.getElementById("frame-canvas");
+const ctx = canvas.getContext("2d");
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+window.addEventListener("resize", () => {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+});
+7. Frame Configuration
+JavaScript
+Copy code
+const TOTAL_FRAMES = 160;
+const frames = [];
+Frame naming format:
+Copy code
+
+frames/frame-0001.webp
+frames/frame-0002.webp
+frames/frame-0003.webp
+...
+8. Frame Loader Function
+JavaScript
+Copy code
+function loadFrame(index) {
+
+  return new Promise((resolve) => {
+
+    const img = new Image();
+
+    const frameNumber = String(index + 1).padStart(4,"0");
+
+    img.src = `/frames/frame-${frameNumber}.webp`;
+
+    img.onload = () => {
+      frames[index] = img;
+      resolve();
+    };
+
+  });
+
+}
+9. Batch Preloading System
+Do not load all frames at once.
+Browsers limit connections (~6 per domain).
+Use batching:
+JavaScript
+Copy code
+async function preloadFrames(){
+
+  const BATCH = 20;
+
+  for(let i=0;i<TOTAL_FRAMES;i+=BATCH){
+
+    const batch = [];
+
+    for(let j=i;j<Math.min(i+BATCH,TOTAL_FRAMES);j++){
+
+      batch.push(loadFrame(j));
+
+    }
+
+    await Promise.all(batch);
+
+    updateLoadingProgress(i + BATCH, TOTAL_FRAMES);
+
+  }
+
+}
+10. Loading Progress Indicator
+JavaScript
+Copy code
+function updateLoadingProgress(loaded,total){
+
+  const percent = Math.min(100,Math.floor((loaded/total)*100));
+
+  console.log(`Loading ${percent}%`);
+
+}
+You can replace this with a loading bar UI.
+11. Scroll → Frame Mapping
+Convert scroll position into animation frame.
+JavaScript
+Copy code
+function getCurrentFrame(){
+
+  const scrollTop = window.scrollY;
+
+  const scrollHeight =
+    document.body.scrollHeight - window.innerHeight;
+
+  const scrollFraction = scrollTop / scrollHeight;
+
+  const frameIndex =
+    Math.min(
+      TOTAL_FRAMES-1,
+      Math.floor(scrollFraction * TOTAL_FRAMES)
+    );
+
+  return frameIndex;
+
+}
+12. Render Function
+Draw the frame on canvas.
+JavaScript
+Copy code
+function render(){
+
+  const frameIndex = getCurrentFrame();
+
+  const img = frames[frameIndex];
+
+  if(!img) return;
+
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+
+  ctx.drawImage(img,0,0,canvas.width,canvas.height);
+
+}
+Drawing an image onto canvas is extremely fast (GPU accelerated).
+13. Scroll Event Listener
+Update frame on scroll.
+JavaScript
+Copy code
+window.addEventListener("scroll",()=>{
+
+  requestAnimationFrame(render);
+
+});
+Using requestAnimationFrame prevents unnecessary renders.
+14. Initialize the Experience
+JavaScript
+Copy code
+async function startExperience(){
+
+  await preloadFrames();
+
+  render();
+
+}
+
+startExperience();
+15. Final Result
+This system produces:
+Apple-style product animations
+Smooth frame-accurate scrubbing
+Perfect scroll synchronization
+No video playback issues
+Predictable performance across browsers
