@@ -1,0 +1,36 @@
+Use the uploaded image as the base photograph while preserving the original
+composition, perspective, framing, subject placement, and overall realism.
+Transform the environment into a breathtaking ultra-realistic mist-covered forest
+scene with dense natural white fog flowing seamlessly through the foreground.,
+midground, background, and surrounding vegetation. Build multiple layers of
+atmospheric mist to create cinematic depth, mystery, and an immersive woodland
+atmosphere while keeping the fog soft, natural, and physically realistic.
+Apply a premium forest-inspired cinematic color grade using deep emerald green,
+dark teal, rich moss green, earthy brown, muted natural highlights, and soft matte
+shadows. Enhance every tree, leaf, branch, and landscape element with realistic
+texture, depth, and natural rainforest richness, making the location resemble a hidden
+enchanted forest without appearing artificial.
+Introduce subtle volumetric light rays gently filtering through the fog and forest
+canopy. producing realistic god rays, atmospheric diffusion, and soft environmental
+illumination. Strengthen atmospheric perspective so distant trees gradually disappear
+into the mist, increasing visual depth and cinematic realism.
+Upgrade the image to professional DSLR quality with ultra-high-definition resolution,
+razor-sharp natural details, HDR dynamic range, refined micro-contrast, balanced
+exposure, improved highlights and shadows, realistic textures, smooth tonal
+transitions, and authentic color harmony. Preserve a completely photographic
+appearance without creating a cGl or Al-generated look.
+Style:
+Enhance the environment with realistic humidity, delicate woodland haze, soft cold
+morning ambience, natural depth separation, cinematic mood, and premium
+editorial-style Lightroom color grading. The final result should resemble a high-end
+landscape photograph captured during a cold misty morning inside a lush rainforest,
+featuring exceptional realism, immersive atmosphere, and professional visual quality.
+Negative Prompt:
+Ultra-Realistic Forest Photography, Cinematic Woodland, Dense Natural Fog,
+Volumetric Lighting, Deep Emerald Green, Moss Green, Dark Teal, Earthy Brown, HDR
+Photography, Premium Lightroom Color Grading, DSLR Quality. Atmospheric
+Perspective, Photorealistic, 4K Ultra-HD, National Geographic Documentary Style, Cold
+Misty Morning, Moody Nature.
+cartoon, cGI, illustration, painting, fantasy elements, oversaturated colors, artificial fog.
+fake lighting, unrealistic glow, plastic textures, excessive HDR, blurry details, low
+resolution, noise, artifacts, watermark, logo, text, overprocessed image, AI look
